@@ -17,7 +17,7 @@ public class StarfallManager : MonoBehaviour {
 		EndGame
 	}	
 
-	public GameObject Player1Obj,Player2Obj,DiceButton,QPanel,Dice1,Dice2,Choice1,Choice2,Choice3,FXPlayer;
+	public GameObject Player1Obj,Player2Obj,DiceButton,QPanel,Dice1,Dice2,Choice1,Choice2,Choice3,FXPlayer,TurnDisplay;
 	public AudioClip diceSound, qPop,Booing,winSound;
 	Dictionary<string,string[]> PositonInfoDict ;
 	GameState gameState;
@@ -81,10 +81,12 @@ public class StarfallManager : MonoBehaviour {
 						ObjUsing = Player1Obj;
 						usingPos = playerPos;
 //						print("UserTurn");
+						TurnDisplay.GetComponent<Text>().text = "Player1's Turn";
 					}else if (turnControl.Equals("Robot")){
 						usingPos = robotPos;
 						ObjUsing = Player2Obj;
 //						print("RobotTurn");
+						TurnDisplay.GetComponent<Text>().text = "Player2's Turn";
 					}
 
 					doItOnce = false;
