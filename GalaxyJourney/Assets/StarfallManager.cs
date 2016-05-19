@@ -67,7 +67,7 @@ public class StarfallManager : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 
 		
 
@@ -157,6 +157,7 @@ public class StarfallManager : MonoBehaviour {
 
 					Player1Obj.GetComponent<CircleCollider2D>().isTrigger = true;
 					Player2Obj.GetComponent<CircleCollider2D>().isTrigger = true;
+					doItOnce = false;
 
 				}
 
