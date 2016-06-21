@@ -147,9 +147,7 @@ public class GameManager : MonoBehaviour
 
         QPanel.SetActive(false);
         EffectPanel.SetActive(false);
-//        SpaceShip1.GetComponent<PlayerStatus>().effct = PlayerStatus.StatusEffect.None;
-//        SpaceShip2.GetComponent<PlayerStatus>().effct = PlayerStatus.StatusEffect.None;
-        /////
+
         TextAsset jString = (TextAsset)Resources.Load("JSON/PositionProperty");
         string jsonString = jString.text;
         PositonInfoDict = JsonMapper.ToObject<Dictionary<string, string[]>>(jsonString);
