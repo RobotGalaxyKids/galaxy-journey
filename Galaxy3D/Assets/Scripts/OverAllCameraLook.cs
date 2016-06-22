@@ -18,7 +18,7 @@ public class OverAllCameraLook : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
 
 
 		if(KeepDistance2ndStage){

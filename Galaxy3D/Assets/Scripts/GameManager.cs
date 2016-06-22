@@ -211,7 +211,7 @@ public class GameManager : MonoBehaviour
 
 
     //update for Stage
-    void FixedUpdate()
+    void Update()
     {
 
 
