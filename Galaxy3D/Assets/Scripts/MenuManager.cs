@@ -9,29 +9,6 @@ public class MenuManager : MonoBehaviour {
 
 
 
-	// Use this for initialization
-	void Start () {
-
-
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-//		print(LongContent.transform.localPosition);
-		if(stage == 0){
-
-			LongContent.transform.localPosition = Vector3.MoveTowards(LongContent.transform.localPosition, new Vector3(400,0,0), 900 * Time.deltaTime);
-
-
-		}else if (stage == 1){
-
-			LongContent.transform.localPosition = Vector3.MoveTowards(LongContent.transform.localPosition, new Vector3(-400,0,0), 900 * Time.deltaTime);
-
-		}
-	
-	}
 
 
 	public void GotoGame(){
@@ -116,13 +93,14 @@ public class MenuManager : MonoBehaviour {
 
 	public void To2ndPage(){
 
-		 stage =1;
+		LongContent.GetComponent<Animator> ().SetBool ("2ndPage", true );
+//		 stage =1;
 
 	}
 
 	public void To1stPage(){
-
-		stage = 0;
+		LongContent.GetComponent<Animator> ().SetBool ("2ndPage", false );
+//		stage = 0;
 
 	}
 

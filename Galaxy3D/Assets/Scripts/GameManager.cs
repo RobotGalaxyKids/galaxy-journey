@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 				        Ans2,
 				        Ans3;
 
-    public GameObject EffectPanel, OkEffectBtn, TextEffect;
+    public GameObject EffectPanel, OkEffectBtn, TextEffect,FXControl;
 
     public GameObject MinimapContent, numberPrefab;
 
@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour
     bool goingBack = false;
     bool stopCam = false;
     bool doItOnce = true;
+	bool doItMove = true;
     bool swapBool = false;
 
     bool tutorMode = false;
@@ -474,11 +475,14 @@ public class GameManager : MonoBehaviour
 					
 
                     //rotate
-                    Vector3 diff = usingSpaceship.transform.position - new Vector3(TTaget[nTarget].transform.position.x, TTaget[nTarget].transform.position.y + distBTWShip, TTaget[nTarget].transform.position.z);
-                    diff.Normalize();
-                    float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-                    usingSpaceship.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 180);
-
+					if (doItMove) {
+						doItMove = false;
+						FXControl.GetComponent<AudioSource> ().Play ();
+						Vector3 diff = usingSpaceship.transform.position - new Vector3 (TTaget [nTarget].transform.position.x, TTaget [nTarget].transform.position.y + distBTWShip, TTaget [nTarget].transform.position.z);
+						diff.Normalize ();
+						float rot_z = Mathf.Atan2 (diff.y, diff.x) * Mathf.Rad2Deg;
+						usingSpaceship.transform.rotation = Quaternion.Euler (0f, 0f, rot_z + 180);
+					}
                     usingSpaceship.transform.position = Vector3.MoveTowards(usingSpaceship.transform.position, new Vector3(TTaget[nTarget].transform.position.x, TTaget[nTarget].transform.position.y + distBTWShip, TTaget[nTarget].transform.position.z), shipSpeed * Time.deltaTime);
                     MinimapContent.GetComponent<RectTransform>().transform.localPosition = Vector3.MoveTowards(MinimapContent.GetComponent<RectTransform>().transform.localPosition, new Vector3(orgMini.x - (nTarget * numberBoxWidth), MinimapContent.GetComponent<RectTransform>().transform.localPosition.y, MinimapContent.GetComponent<RectTransform>().transform.localPosition.z), 275 * Time.deltaTime);
 
@@ -537,7 +541,7 @@ public class GameManager : MonoBehaviour
 
                     if (usingSpaceship.transform.position.Equals(new Vector3(TTaget[nTarget].transform.position.x, TTaget[nTarget].transform.position.y + distBTWShip, TTaget[nTarget].transform.position.z)) && countDice > 0)
                     {
-
+						doItMove = true;
                         countDice--;
                         doItOnce = true;
 
@@ -562,7 +566,7 @@ public class GameManager : MonoBehaviour
 
                     if (usingSpaceship.transform.position.Equals(new Vector3(TTaget[nTarget].transform.position.x, TTaget[nTarget].transform.position.y + distBTWShip, TTaget[nTarget].transform.position.z)) && countDice <= 0)
                     {
-
+						doItMove = true;
                         usingSpaceship.transform.rotation = Quaternion.Euler(0, usingSpaceship.transform.rotation.eulerAngles.y, usingSpaceship.transform.rotation.eulerAngles.z);
 
 //                        if (turnControl == "User")
