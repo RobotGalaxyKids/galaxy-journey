@@ -35,16 +35,24 @@ public class GameManager : MonoBehaviour
 
     public GameObject RollBtn;
     public GameObject[] TTaget, miniNumObj;
+    public Sprite[] ShipModel;
 
 
     public GameObject PrefabShip;
+
+
+
+    public AudioClip ShipMove,QuesionPop,EndGame;
     // Planet Collection, Going to delet it soon :3
     GameObject usingSpaceship;
     Dictionary<string,string[]> PositonInfoDict;
-    Vector3 orgMini, tPos;
+    Vector3 orgMini, tPos,nextStarLocate;
     // tpos = OverCamera Position, org = original Camera Position
     Vector3 tempPos1, tempPos2;
     GameState gameState = GameState.Start;
+
+
+
 
 
 
@@ -65,9 +73,9 @@ public class GameManager : MonoBehaviour
     // leftStep
 
 
-    float shipSpeed = 20;
+    float shipSpeed = 20f;
     float minCameraDistant = 0;
-    float distBTWShip = 2f;
+    float distBTWShip = 1.5f;
     float cameraSpeed = 25f;
     float waitTime = 1f;
 
@@ -81,6 +89,9 @@ public class GameManager : MonoBehaviour
 
     bool tutorMode = false;
     bool effect2Move = false;
+    bool atSpot = false;
+
+
     float numberBoxWidth = 1f;
 
 
@@ -108,34 +119,40 @@ public class GameManager : MonoBehaviour
 
 			Color cShip = Color.white;
 			Vector3 pShip = new Vector3(0,0,0);
+
+
+
 			if(i == 0){
-				pShip = new Vector3(-51,-40,0);
+				pShip = new Vector3(0,2,0);
 				cShip = Color.white;
 
 			}else if(i == 1){
-				pShip = new Vector3(-48,-40,0);
-				cShip = Color.blue;
+				pShip = new Vector3(2,0,0);
+				cShip = Color.white;
 
 			}else if(i == 2){
-				pShip = new Vector3(-51,-44,0);
-				cShip = Color.cyan;
+				pShip = new Vector3(0,-2,0);
+				cShip = Color.white;
 
 			}else if(i == 3){
-				pShip = new Vector3(-48,-44,0);
-				cShip = Color.magenta;
+				pShip = new Vector3(-2,0,0);
+				cShip = Color.white;
 
 			}
 
 			if(PlayerPrefs.GetString(("P"+(i+1)+"Type")) != "None"){
-
+				
 				shipPosition[shipIndexFix] = 0;
 				shipName[shipIndexFix] = PlayerPrefs.GetString(("P"+(i+1)+"Name"));
 				shipPlayerType[shipIndexFix] = PlayerPrefs.GetString(("P"+(i+1)+"Type"));
 				shipInUse[shipIndexFix] = Instantiate(PrefabShip) as GameObject;
-
-				shipInUse[shipIndexFix].transform.position = pShip;
+				shipInUse[shipIndexFix].transform.Find("spaceShip").gameObject.GetComponent<SpriteRenderer>().sprite = ShipModel[i];
+				shipInUse[shipIndexFix].transform.SetParent(TTaget[0].transform.Find("Orbit").transform);
+//				shipInUse[shipIndexFix].transform.rotation = Quaternion.Euler(0,0,360-(90*i));
+				shipInUse[shipIndexFix].transform.localPosition = pShip;
 				shipInUse[shipIndexFix].GetComponent<PlayerStatus>().effct = PlayerStatus.StatusEffect.None;
 				shipInUse[shipIndexFix].transform.Find("spaceShip").gameObject.GetComponent<SpriteRenderer>().color = cShip;
+				shipInUse[shipIndexFix].transform.localRotation = Quaternion.Euler(0,0,360-(90*i));
 				shipIndexFix ++;
 
 			}
@@ -210,7 +227,7 @@ public class GameManager : MonoBehaviour
 
 
     //update for Stage
-    void Update()
+    void FixedUpdate()
     {
 
 
@@ -239,7 +256,7 @@ public class GameManager : MonoBehaviour
 
 //                        SpaceShip1.GetComponent<TrailRenderer>().enabled = true;
 //                        SpaceShip2.GetComponent<TrailRenderer>().enabled = false;
-						openShipTrail(turnIndex);
+//						openShipTrail(turnIndex);
 
                         TextStageObj.GetComponent<Text>().text = shipName[turnIndex] +"'S TURN";
 
@@ -283,7 +300,7 @@ public class GameManager : MonoBehaviour
 
                     for(int i = 0 ; i < playerCount ; i++){
 
-                    	shipInUse[i].transform.rotation = Quaternion.Euler(0,0,0);
+						shipInUse[i].transform.localRotation = Quaternion.Euler(0,0,360-(90*i));
 
                     }
 
@@ -362,7 +379,7 @@ public class GameManager : MonoBehaviour
                 }
 
 
-                if (CamecamecamehaPilot.transform.localPosition == new Vector3(minCameraDistant, usingSpaceship.transform.localPosition.y, tPos.z))
+                if (CamecamecamehaPilot.transform.position == new Vector3(minCameraDistant, usingSpaceship.transform.position.y, tPos.z))
                 {
                			
 			
@@ -408,7 +425,7 @@ public class GameManager : MonoBehaviour
 
 //                        TextEffect.GetComponent<Text>().text = turnControl.ToUpper() + " IS CONFUSING! AND WILL GOING BACKWARD IS TURN";
 						TextEffect.GetComponent<Text>().text = shipName[turnIndex].ToUpper() + " IS CONFUSING! AND WILL GOING BACKWARD IS TURN";
-                        usingSpaceship.transform.rotation = Quaternion.Euler(0, 0, 180);
+                        usingSpaceship.transform.localRotation = Quaternion.Euler(0, 0, 180);
 
 
                     }
@@ -443,9 +460,9 @@ public class GameManager : MonoBehaviour
 				// Set Camera While Moving
                 CamecamecamehaPilot.GetComponent<OverAllCameraLook>().KeepDistance2ndStage = true;
 
-                if (!CamecamecamehaPilot.GetComponent<OverAllCameraLook>().finishFirstMove)
+                if (!CamecamecamehaPilot.GetComponent<OverAllCameraLook>().finishFirstMove){
                     return;
-
+                }
 
                     
                 if (!goingBack)
@@ -470,64 +487,122 @@ public class GameManager : MonoBehaviour
                 }
 			
 
+				
+
+////				print(TTaget[usingPos].transform.Find("Orbit").gameObject.transform.rotation.eulerAngles.z);
+////
+//				if(TTaget [usingPos].transform.Find("Orbit").gameObject.transform.rotation.eulerAngles.z <= 45 + (90*turnIndex)){
+//
+//
+////					print(TTaget[usingPos].transform.Find("Orbit").gameObject.transform.rotation.eulerAngles.z);
+////
+//					atSpot = true;
+//				}
+//
+//
+//				if(!atSpot){
+//
+//					return;
+//
+//				}
+
                 if (nTarget < TTaget.Length)
                 {
 					
 
+					if(turnIndex == 0){
+
+//							nextStarLocate = new Vector3(TTaget [nTarget].transform.position.x - distBTWShip, TTaget [nTarget].transform.position.y + distBTWShip, TTaget [nTarget].transform.position.z);
+							nextStarLocate = TTaget [nTarget].transform.Find("Orbit").gameObject.transform.Find("pos1").transform.position;
+
+						}else if(turnIndex == 1){
+
+//							nextStarLocate = new Vector3(TTaget [nTarget].transform.position.x + distBTWShip, TTaget [nTarget].transform.position.y + distBTWShip, TTaget [nTarget].transform.position.z);
+							nextStarLocate = TTaget [nTarget].transform.Find("Orbit").gameObject.transform.Find("pos2").transform.position;
+
+						}else if(turnIndex == 2){
+
+
+//							nextStarLocate = new Vector3(TTaget [nTarget].transform.position.x - distBTWShip, TTaget [nTarget].transform.position.y - distBTWShip, TTaget [nTarget].transform.position.z);
+							nextStarLocate = TTaget [nTarget].transform.Find("Orbit").gameObject.transform.Find("pos3").transform.position;
+
+						}else if(turnIndex == 3){
+
+//							nextStarLocate = new Vector3(TTaget [nTarget].transform.position.x + distBTWShip, TTaget [nTarget].transform.position.y - distBTWShip, TTaget [nTarget].transform.position.z);
+							nextStarLocate = TTaget [nTarget].transform.Find("Orbit").gameObject.transform.Find("pos4").transform.position;
+
+						}
+
                     //rotate
 					if (doItMove) {
+//						shipInUse[turnIndex].transform.SetParent(TTaget [nTarget].transform.Find("Orbit"));
+						shipInUse[turnIndex].transform.SetParent(null);
+						CamecamecamehaPilot.GetComponent<OverAllCameraLook>().spaceShip = usingSpaceship;
+//						nextStarLocate = new Vector3(TTaget [nTarget].transform.position.x, TTaget [nTarget].transform.position.y + distBTWShip, TTaget [nTarget].transform.position.z);
 						doItMove = false;
+						FXControl.GetComponent<AudioSource>().clip = ShipMove ;
 						FXControl.GetComponent<AudioSource> ().Play ();
-						Vector3 diff = usingSpaceship.transform.position - new Vector3 (TTaget [nTarget].transform.position.x, TTaget [nTarget].transform.position.y + distBTWShip, TTaget [nTarget].transform.position.z);
-						diff.Normalize ();
-						float rot_z = Mathf.Atan2 (diff.y, diff.x) * Mathf.Rad2Deg;
-						usingSpaceship.transform.rotation = Quaternion.Euler (0f, 0f, rot_z + 180);
+
+
+
+
+						miniNumObj[nTarget].transform.Find("Text").GetComponent<Text>().fontSize = 26;
+						miniNumObj[nTarget].transform.Find("Text").GetComponent<Text>().color = markColor;
+
+						if(nTarget > 1 && nTarget< 28){
+							miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
+							miniNumObj[nTarget-2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
+							miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
+							miniNumObj[nTarget+2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
+							miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().color = oldColor;
+							miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().color = oldColor;
+
+						}else if(nTarget == 1){
+
+							miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
+							miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
+							miniNumObj[nTarget+2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
+							miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().color = oldColor;
+							miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().color = oldColor;
+
+						}else if(nTarget == 0 ){
+
+							miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
+							miniNumObj[nTarget+2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
+
+							miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().color = oldColor;
+
+						}else if (nTarget == 28){
+
+							miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
+							miniNumObj[nTarget-2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
+							miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
+							miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().color = oldColor;
+							miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().color = oldColor;
+
+						}else if (nTarget == 29){
+
+							miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
+							miniNumObj[nTarget-2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
+							miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().color = oldColor;
+
+
+						}
+
+
 					}
-                    usingSpaceship.transform.position = Vector3.MoveTowards(usingSpaceship.transform.position, new Vector3(TTaget[nTarget].transform.position.x, TTaget[nTarget].transform.position.y + distBTWShip, TTaget[nTarget].transform.position.z), shipSpeed * Time.deltaTime);
+
+//                    usingSpaceship.transform.position = Vector3.MoveTowards(usingSpaceship.transform.position, new Vector3(TTaget[nTarget].transform.position.x, TTaget[nTarget].transform.position.y + distBTWShip, TTaget[nTarget].transform.position.z), shipSpeed * Time.deltaTime);
+					usingSpaceship.transform.position = Vector3.MoveTowards(usingSpaceship.transform.position, nextStarLocate, shipSpeed * Time.deltaTime);
                     MinimapContent.GetComponent<RectTransform>().transform.localPosition = Vector3.MoveTowards(MinimapContent.GetComponent<RectTransform>().transform.localPosition, new Vector3(orgMini.x - (nTarget * numberBoxWidth), MinimapContent.GetComponent<RectTransform>().transform.localPosition.y, MinimapContent.GetComponent<RectTransform>().transform.localPosition.z), 275 * Time.deltaTime);
+					
 
-					miniNumObj[nTarget].transform.Find("Text").GetComponent<Text>().fontSize = 26;
-					miniNumObj[nTarget].transform.Find("Text").GetComponent<Text>().color = markColor;
-
-					if(nTarget > 1 && nTarget< 28){
-						miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
-						miniNumObj[nTarget-2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
-						miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
-						miniNumObj[nTarget+2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
-						miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().color = oldColor;
-						miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().color = oldColor;
-
-					}else if(nTarget == 1){
-
-						miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
-						miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
-						miniNumObj[nTarget+2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
-						miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().color = oldColor;
-						miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().color = oldColor;
-
-					}else if(nTarget == 0 ){
-
-						miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
-						miniNumObj[nTarget+2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
-
-						miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().color = oldColor;
-
-					}else if (nTarget == 28){
-
-						miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
-						miniNumObj[nTarget-2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
-						miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
-						miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().color = oldColor;
-						miniNumObj[nTarget+1].transform.Find("Text").GetComponent<Text>().color = oldColor;
-
-					}else if (nTarget == 29){
-
-						miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().fontSize = 20;
-						miniNumObj[nTarget-2].transform.Find("Text").GetComponent<Text>().fontSize = 14;
-						miniNumObj[nTarget-1].transform.Find("Text").GetComponent<Text>().color = oldColor;
+					Vector3 diff = usingSpaceship.transform.position - nextStarLocate;
+					diff.Normalize ();
+					float rot_z = Mathf.Atan2 (diff.y, diff.x) * Mathf.Rad2Deg;
+					usingSpaceship.transform.rotation = Quaternion.Euler (0f, 0f, rot_z + 180);
 
 
-					}
 //					usingSpaceship.transform.rotation = Quaternion.RotateTowards(usingSpaceship.transform.rotation, new Quaternion());
                     //usingSpaceship.transform.LookAt(lookAtPoint);
 
@@ -539,8 +614,10 @@ public class GameManager : MonoBehaviour
 //					usingSpaceship();
 
 
-                    if (usingSpaceship.transform.position.Equals(new Vector3(TTaget[nTarget].transform.position.x, TTaget[nTarget].transform.position.y + distBTWShip, TTaget[nTarget].transform.position.z)) && countDice > 0)
+					if (usingSpaceship.transform.position.Equals(nextStarLocate) && countDice > 0)
                     {
+//						usingSpaceship.transform.SetParent(TTaget [nTarget].transform.Find("Orbit").gameObject.transform);
+//						atSpot = false;
 						doItMove = true;
                         countDice--;
                         doItOnce = true;
@@ -564,10 +641,16 @@ public class GameManager : MonoBehaviour
                     }
 
 
-                    if (usingSpaceship.transform.position.Equals(new Vector3(TTaget[nTarget].transform.position.x, TTaget[nTarget].transform.position.y + distBTWShip, TTaget[nTarget].transform.position.z)) && countDice <= 0)
+					if (usingSpaceship.transform.position.Equals(nextStarLocate) && countDice <= 0)
                     {
+//						FXControl.GetComponent<AudioSource> ().Stop();
+
+//						atSpot = false;
+						CamecamecamehaPilot.GetComponent<OverAllCameraLook>().spaceShip = TTaget [nTarget];
 						doItMove = true;
-                        usingSpaceship.transform.rotation = Quaternion.Euler(0, usingSpaceship.transform.rotation.eulerAngles.y, usingSpaceship.transform.rotation.eulerAngles.z);
+//                        usingSpaceship.transform.rotation = Quaternion.Euler(0, usingSpaceship.transform.rotation.eulerAngles.y, usingSpaceship.transform.rotation.eulerAngles.z);
+						usingSpaceship.transform.SetParent(TTaget [nTarget].transform.Find("Orbit").gameObject.transform);
+						shipInUse[turnIndex].transform.localRotation = Quaternion.Euler(0,0,360-(90*turnIndex));
 
 //                        if (turnControl == "User")
 //                        {
@@ -612,6 +695,8 @@ public class GameManager : MonoBehaviour
                     {
 
 //                        TextStageObj.GetComponent<Text>().text = "END!!! " + turnControl.ToString() + " Win!!";
+						FXControl.GetComponent<AudioSource>().clip = EndGame ;
+						FXControl.GetComponent<AudioSource> ().Play ();
 						TextStageObj.GetComponent<Text>().text = "END!!! " + shipName[turnIndex].ToString() + " Win!!";
 
                         gameState = GameState.EndGame;
@@ -624,6 +709,9 @@ public class GameManager : MonoBehaviour
 
                         if (PositonInfoDict["" + (usingPos + 1)][0].ToUpper().Equals("YES"))
                         {
+
+							FXControl.GetComponent<AudioSource>().clip = QuesionPop  ;
+							FXControl.GetComponent<AudioSource> ().Play ();
 //							print("Q TIME");
                             QPanel.SetActive(true);
                             Question.GetComponent<Text>().text = PositonInfoDict["" + (usingPos + 1)][1];
@@ -853,10 +941,12 @@ public class GameManager : MonoBehaviour
 
     public void RollDice()
     {
+
+    	
         RollBtn.SetActive(false);
-        dicePoint = Random.Range(1, 7);
+        dicePoint = ((Random.Range(1, 7) + Random.Range(1,7))%6)+1;
 
-
+//		dicePoint = 1;
 
 //		dicePoint = 4;
 //		if(turnControl == "Robot"){

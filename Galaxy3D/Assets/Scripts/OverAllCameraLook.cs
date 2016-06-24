@@ -18,7 +18,7 @@ public class OverAllCameraLook : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 
 
 		if(KeepDistance2ndStage){
@@ -26,7 +26,8 @@ public class OverAllCameraLook : MonoBehaviour {
 
 			transform.position =  Vector3.MoveTowards(transform.position, new Vector3(spaceShip.transform.position.x,spaceShip.transform.position.y+0f,spaceShip.transform.position.z - distance),50f*Time.deltaTime) ;
 
-			if(transform.position == new Vector3(spaceShip.transform.position.x,spaceShip.transform.position.y+0f,spaceShip.transform.position.z - distance) ){
+
+			if(transform.position == new Vector3(spaceShip.transform.position.x,spaceShip.transform.position.y+0f,spaceShip.transform.position.z - distance)){
 
 				finishFirstMove = true;
 

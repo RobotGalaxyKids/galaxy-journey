@@ -25,8 +25,6 @@
 			"PictureQ", 
 			"SoundPath"
 			
-
-
 		],
 	"3":
 		[
@@ -52,8 +50,6 @@
 			"2",
 			"PictureQ", 
 			"SoundPath"
-			
-
 
 		],
 	"5":
@@ -73,8 +69,24 @@
 		],
 	"6":
 		[
+			"No",	
+			"Oh you found something. What is it? What is this cute fluffy little thing!?",	
+			"Cat",
+			"Lion",	
+			"Tiger",	
+			"1",
+			"PictureQ", 
+			"SoundPath"
+			
+			
+
+
+		],
+	"7":
+		[
+
 			"Yes",	
-			"Question at 6. Correct Answer is 2 ",	
+			"Question at 7. Correct Answer is 2 ",	
 			"ans1",
 			"ans2",	
 			"ans3",	
@@ -85,9 +97,8 @@
 
 
 		],
-	"7":
+	"8":
 		[
-
 			"No",	
 			"aa",	
 			"ans1",
@@ -100,7 +111,7 @@
 
 
 		],
-	"8":
+	"9":
 		[
 			"Ladder",	
 			"16",	
@@ -114,7 +125,7 @@
 
 
 		],
-	"9":
+	"10" :
 		[
 			"No",	
 			"12",	
@@ -124,11 +135,10 @@
 			"CorrAns",
 			"PictureQ", 
 			"SoundPath"
-			
 
 
 		],
-	"10" :
+	"11":
 		[
 			"Trap",	
 			"1",	
@@ -142,7 +152,7 @@
 
 
 		],
-	"11":
+	"12":
 		[
 			"No",	
 			"Question",	
@@ -150,20 +160,6 @@
 			"ans2",	
 			"ans3",	
 			"CorrAns",
-			"PictureQ", 
-			"SoundPath"
-			
-
-
-		],
-	"12":
-		[
-			"Yes",	
-			"Question at 12. Correct Answer is 1",	
-			"ans1",
-			"ans2",	
-			"ans3",	
-			"1",
 			"PictureQ", 
 			"SoundPath"
 			
@@ -172,12 +168,12 @@
 		],
 	"13":
 		[
-			"No",	
-			"Question",	
+			"Yes",	
+			"Question at 12. Correct Answer is 1",	
 			"ans1",
 			"ans2",	
 			"ans3",	
-			"CorrAns",
+			"1",
 			"PictureQ", 
 			"SoundPath"
 			
@@ -200,7 +196,7 @@
 		],
 	"15":
 		[
-			"DoubleDice",	
+			"No",	
 			"Question",	
 			"ans1",
 			"ans2",	
@@ -214,8 +210,8 @@
 		],
 	"16":
 		[
-			"No",	
-			"9",	
+			"DoubleDice",	
+			"Question",	
 			"ans1",
 			"ans2",	
 			"ans3",	
@@ -228,7 +224,7 @@
 		],
 	"17":
 		[
-			"Snake",	
+			"No",	
 			"9",	
 			"ans1",
 			"ans2",	
@@ -242,6 +238,20 @@
 		],
 	"18":
 		[
+			"Snake",	
+			"10",	
+			"ans1",
+			"ans2",	
+			"ans3",	
+			"CorrAns",
+			"PictureQ", 
+			"SoundPath"
+			
+
+
+		],
+	"19":
+		[
 			"Yes",	
 			"Question at 18. Correct Answer is 1",	
 			"ans1",
@@ -251,10 +261,11 @@
 			"PictureQ", 
 			"SoundPath"
 			
+			
 
 
 		],
-	"19":
+	"20":
 		[
 			"Swap",	
 			"Question",	
@@ -265,26 +276,13 @@
 			"PictureQ", 
 			"SoundPath"
 			
-
-
-		],
-	"20":
-		[
-			"No",	
-			"Question",	
-			"ans1",
-			"ans2",	
-			"ans3",	
-			"CorrAns",
-			"PictureQ", 
-			"SoundPath"
 			
 
 
 		],
 	"21":
 		[
-			"BackWard",	
+			"Trap",	
 			"Question",	
 			"ans1",
 			"ans2",	
@@ -298,7 +296,7 @@
 		],
 	"22":
 		[
-			"No",	
+			"BackWard",	
 			"Question",	
 			"ans1",
 			"ans2",	

@@ -91,7 +91,7 @@ public class ScreenScroller : MonoBehaviour {
 			CameCamera.transform.position = Vector3.MoveTowards(CameCamera.transform.position,new Vector3 (CameCamera.transform.position.x-50,CameCamera.transform.position.y,CameCamera.transform.position.z),speed*Time.deltaTime);
 			orgPos.x -=speed*Time.deltaTime;
 
-		}else if((!goLeft) && CameCamera.transform.position.x < 154){
+		}else if((!goLeft) && CameCamera.transform.position.x < 256){
 
 			CameCamera.transform.position = Vector3.MoveTowards(CameCamera.transform.position,new Vector3 (CameCamera.transform.position.x+50,CameCamera.transform.position.y,CameCamera.transform.position.z),speed*Time.deltaTime);
 			orgPos.x +=speed*Time.deltaTime;

@@ -23,6 +23,7 @@ public class PlayerSetting : MonoBehaviour {
 
 
 
+
 	// Use this for initialization
 	void Start () {
 
@@ -134,6 +135,8 @@ public class PlayerSetting : MonoBehaviour {
 	}
 
 	public void DownBtnPress(){
+
+		
 		if(indexShip <6){
 			indexShip +=1;
 		}

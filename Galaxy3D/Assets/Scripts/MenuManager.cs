@@ -3,7 +3,9 @@ using System.Collections;
 
 public class MenuManager : MonoBehaviour {
 
-	public GameObject LongContent,ShopPanel,Slot1,Slot2,Slot3,Slot4;
+	public GameObject LongContent,ShopPanel,Slot1,Slot2,Slot3,Slot4,FXManage;
+
+	public AudioClip ChangeShip;
 	int stage = 0;
 	int playerCount = 4 ;
 
@@ -109,6 +111,13 @@ public class MenuManager : MonoBehaviour {
 
 
 		ShopPanel.SetActive(!ShopPanel.activeSelf);
+
+	}
+
+	public void PlaySound(){
+		FXManage.GetComponent<AudioSource>().clip = ChangeShip;
+		FXManage.GetComponent<AudioSource>().Play();
+
 
 	}
 }

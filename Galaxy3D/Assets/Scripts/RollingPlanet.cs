@@ -10,7 +10,7 @@ public class RollingPlanet : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		return;
+//		return;
 		orgPos = this.gameObject.transform.position;
 		floatingSpeed = Random.Range(1,100)/300f;
 
@@ -19,9 +19,9 @@ public class RollingPlanet : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		return;
+//		return;
 		if(goingUp){
-
+			transform.Rotate(0,0,-0.1f);
 			if(this.transform.position.y> orgPos.y+amp){
 				goingUp = false;
 			}else{
@@ -33,7 +33,7 @@ public class RollingPlanet : MonoBehaviour {
 
 		}else{
 
-
+			transform.Rotate(0,0,0.1f);
 			if(this.transform.position.y< orgPos.y-amp){
 				goingUp = true;
 
@@ -45,7 +45,7 @@ public class RollingPlanet : MonoBehaviour {
 
 		}
 
-		transform.Rotate(0,0,-0.1f);
+
 
 
 	}
